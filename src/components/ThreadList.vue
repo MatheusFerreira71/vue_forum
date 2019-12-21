@@ -1,0 +1,25 @@
+<template>
+  <div class="thread-list">
+    <h2 class="list-little">Threads</h2>
+    <ThreadListItem
+        v-for="thread in threads"
+        :key="thread['.key']"
+        :thread="thread"
+    />
+  </div>
+</template>
+
+<script>
+import ThreadListItem from '@/components/ThreadListItem'
+export default {
+  components: {
+    ThreadListItem
+  },
+  props: {
+    threads: {
+      required: true,
+      type: Array
+    }
+  }
+}
+</script>
