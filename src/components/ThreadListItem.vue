@@ -6,8 +6,7 @@
       </p>
       <p class="text-faded text-xsmall">
         By
-        <a href="#">{{user.name}}</a>
-        , at {{date}}
+        <a href="#">{{user.name}}</a>, <AppDate :timestamp="this.thread.publishedAt"/>.
       </p>
     </div>
 
@@ -42,9 +41,6 @@ export default {
     },
     user () {
       return sourceData.users[this.thread.userId]
-    },
-    date () {
-      return Date(this.thread.publishedAt)
     }
   }
 }
