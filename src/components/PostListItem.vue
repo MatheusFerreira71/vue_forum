@@ -5,7 +5,7 @@
       <a href="#">
         <img :src="user.avatar" alt="avatar" class="avatar-large" />
       </a>
-      <p class="desktop-only text-small">{{userPostsCount !== 1 ? 'posts' : 'post'}}</p>
+      <p class="desktop-only text-small">{{userPostsCount}} {{userPostsCount !== 1 ? 'posts' : 'post'}}</p>
     </div>
 
     <div class="post-content">

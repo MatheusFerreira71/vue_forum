@@ -11,7 +11,7 @@
     </div>
 
     <div class="activity">
-      <p class="replies-count">{{repliesCount !== 1 ? 'replies' : 'reply'}}</p>
+      <p class="replies-count">{{repliesCount}} {{repliesCount !== 1 ? 'replies' : 'reply'}}</p>
 
       <!-- <img src alt="avatar" class="avatar-medium" /> -->
 
