@@ -11,9 +11,7 @@ import CategoryList from '@/components/CategoryList'
 export default {
   data () {
     return {
-      categories: Object.values(sourceData.categories),
-      posts: sourceData.posts,
-      users: sourceData.users
+      categories: Object.values(sourceData.categories)
     }
   },
   components: {
