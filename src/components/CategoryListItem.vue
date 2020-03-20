@@ -9,7 +9,6 @@
 
 <script>
 import ForumList from '@/components/ForumList'
-import sourceData from '@/data.json'
 export default {
   props: {
     category: {
@@ -19,7 +18,7 @@ export default {
   },
   computed: {
     categoryForums () {
-      return Object.values(sourceData.forums).filter(forum => forum.categoryId === this.category['.key'])
+      return Object.values(this.$store.state.forums).filter(forum => forum.categoryId === this.category['.key'])
     }
   },
   components: {

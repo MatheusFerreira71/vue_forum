@@ -5,6 +5,7 @@ import ThreadShow from '@/views/PageThreadShow'
 import PageNotFound from '@/views/PageNotFound'
 import Forum from '@/views/PageForum'
 import Category from '@/views/PageCategory'
+import Profile from '@/views/PageProfile'
 
 Vue.use(VueRouter)
 
@@ -36,6 +37,18 @@ const routes = [
     name: 'Category',
     component: Category,
     props: true
+  },
+  {
+    path: '/me',
+    name: 'Profile',
+    component: Profile,
+    props: true
+  },
+  {
+    path: '/me/edit',
+    name: 'ProfileEdit',
+    component: Profile,
+    props: { edit: true }
   }
 ]
 
