@@ -2,7 +2,7 @@
   <div class="col-large push-top">
     <h1>{{thread.title}}</h1>
     <p>
-      Por <a href="#" class="link-unstyled">Robin</a>, <AppDate :timestamp="thread.publishedAt"/>
+      Por <a href="#" class="link-unstyled">{{threadCreator.name}}</a>, <AppDate :timestamp="thread.publishedAt"/>
       <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">3 replies by 3 contribuitors</span>
     </p>
     <PostList :posts="posts"/>
@@ -32,6 +32,9 @@ export default {
     },
     thread () {
       return this.$store.state.threads[this.id]
+    },
+    threadCreator () {
+      return this.$store.state.users[this.thread.userId]
     }
   }
 }
