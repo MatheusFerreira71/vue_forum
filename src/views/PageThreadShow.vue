@@ -1,6 +1,13 @@
 <template>
   <div class="col-large push-top">
-    <h1>{{thread.title}}</h1>
+    <h1>
+      {{thread.title}}
+      <router-link
+        :to="{name: 'ThreadEdit', id: this.id}"
+        class="btn-green btn-small"
+        tag="button"
+      >Edit this Thread</router-link>
+    </h1>
     <p>
       Por <a href="#" class="link-unstyled">{{threadCreator.name}}</a>, <AppDate :timestamp="thread.publishedAt"/>
       <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">3 replies by 3 contribuitors</span>

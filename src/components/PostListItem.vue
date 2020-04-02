@@ -9,8 +9,24 @@
     </div>
 
     <div class="post-content">
-      <div>
-        <p>{{post.text}}</p>
+      <template v-if="!editing">
+        <div>
+          <p>{{post.text}}</p>
+        </div>
+        <a
+        @click.prevent="editing = true"
+        href="#" style="margin-left: 5px;"
+        class="link-unstyled"
+        title="Make a change">
+          <i class="fa fa-pencil"></i>
+        </a>
+      </template>
+      <div v-else class="col-large">
+        <PostEditor
+        :post="post"
+        :threadId="post.threadId"
+        @save="editing = false"
+        @cancel="editing = false"/>
       </div>
     </div>
     <div class="post-date text-faded">
@@ -23,6 +39,7 @@
 
 <script>
 import { countObjectProperties } from '@/utils/index'
+import PostEditor from './PostEditor'
 export default {
   props: {
     post: {
@@ -30,12 +47,20 @@ export default {
       type: Object
     }
   },
+  components: {
+    PostEditor
+  },
   computed: {
     user () {
       return this.$store.state.users[this.post.userId]
     },
     userPostsCount () {
       return countObjectProperties(this.user.posts)
+    }
+  },
+  data () {
+    return {
+      editing: false
     }
   }
 }
