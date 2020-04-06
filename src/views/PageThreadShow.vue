@@ -10,7 +10,10 @@
     </h1>
     <p>
       Por <a href="#" class="link-unstyled">{{threadCreator.name}}</a>, <AppDate :timestamp="thread.publishedAt"/>
-      <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">3 replies by 3 contribuitors</span>
+      <span
+      style="float:right; margin-top: 2px;"
+      class="hide-mobile text-faded text-small"
+      >{{repliesCount === 1 ? `${repliesCount} reply` : `${repliesCount} replies`}} by 3 contribuitors</span>
     </p>
     <PostList :posts="posts"/>
     <PostEditor
@@ -42,7 +45,16 @@ export default {
     },
     threadCreator () {
       return this.$store.state.users[this.thread.userId]
+    },
+    repliesCount () {
+      return this.$store.getters.threadRepliesCount(this.thread['.key'])
     }
+    // contribuitorsCount () {
+    //   // find replies
+    //   const replies = Object.keys(this.thread.posts).filter(postId => postId !== this.thread.firstPostId)
+    //   // get users ids
+    //   const users =
+    // }
   }
 }
 </script>

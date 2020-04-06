@@ -22,10 +22,8 @@
       </div>
 
       <div class="stats">
-        <span v-if="userPostsCount !== 1">{{userPostsCount}} posts</span>
-        <span v-else>{{userPostsCount}} post</span>
-        <span v-if="userPostsCount !== 1">{{userPostsCount}} threads</span>
-        <span v-else>{{userPostsCount}} thread</span>
+        <span>{{userPostsCount === 1 ? `${userPostsCount} post` : `${userPostsCount} posts`}}</span>
+        <span>{{userThreadsCount === 1 ? `${userThreadsCount} thread` : `${userThreadsCount} threads`}}</span>
       </div>
 
       <hr />
@@ -61,14 +59,6 @@ export default {
     user: {
       required: true,
       type: Object
-    },
-    userPostsCount: {
-      required: true,
-      type: Number
-    },
-    userThreadsCount: {
-      required: true,
-      type: Number
     }
   },
   data () {
@@ -83,6 +73,14 @@ export default {
     },
     cancel () {
       this.$router.push({ name: 'Profile' })
+    }
+  },
+  computed: {
+    userThreadsCount () {
+      return this.$store.getters.userThreadsCount(this.user['.key'])
+    },
+    userPostsCount () {
+      return this.$store.getters.userPostsCount(this.user['.key'])
     }
   }
 }
