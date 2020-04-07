@@ -13,7 +13,8 @@
       <span
       style="float:right; margin-top: 2px;"
       class="hide-mobile text-faded text-small"
-      >{{repliesCount === 1 ? `${repliesCount} reply` : `${repliesCount} replies`}} by 3 contribuitors</span>
+      >{{repliesCount === 1 ? `${repliesCount} reply` : `${repliesCount} replies`}} by
+      {{contribuitorsCount === 1 ? `${contribuitorsCount} contribuitor` : `${contribuitorsCount} contribuitors`}}</span>
     </p>
     <PostList :posts="posts"/>
     <PostEditor
@@ -38,7 +39,8 @@ export default {
   },
   computed: {
     posts () {
-      return Object.values(this.$store.state.posts).filter(post => Object.values(this.thread.posts).includes(post['.key']))
+      return Object.values(this.$store.state.posts)
+        .filter(post => Object.values(this.thread.posts).includes(post['.key']))
     },
     thread () {
       return this.$store.state.threads[this.id]
@@ -48,13 +50,17 @@ export default {
     },
     repliesCount () {
       return this.$store.getters.threadRepliesCount(this.thread['.key'])
+    },
+    contribuitorsCount () {
+      // find replies
+      const replies = Object.keys(this.thread.posts)
+        .filter(postId => postId !== this.thread.firstPostId)
+        .map(postId => this.$store.state.posts[postId])
+      // get users ids
+      const userIds = replies.map(reply => reply.userId)
+      // count uniques contribuitors
+      return userIds.filter((item, index) => index === userIds.indexOf(item)).length
     }
-    // contribuitorsCount () {
-    //   // find replies
-    //   const replies = Object.keys(this.thread.posts).filter(postId => postId !== this.thread.firstPostId)
-    //   // get users ids
-    //   const users =
-    // }
   }
 }
 </script>
