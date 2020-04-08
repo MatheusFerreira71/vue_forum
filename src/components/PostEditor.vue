@@ -60,8 +60,8 @@ export default {
     post: {
       type: Object,
       validator: obj => {
-        const keyIsValid = typeof obj['.key'] === String
-        const textIsValid = typeof obj.text === String
+        const keyIsValid = typeof obj['.key'] === 'string'
+        const textIsValid = typeof obj.text === 'string'
         const valid = keyIsValid && textIsValid
         if (!textIsValid) {
           console.log('The post prop object must include a `text` atribute!')
