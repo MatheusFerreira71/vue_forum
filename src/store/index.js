@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { countObjectProperties } from '@/utils'
+import firebase from 'firebase'
 
 Vue.use(Vuex)
 
@@ -86,6 +87,24 @@ export default new Vuex.Store({
         })
         resolve(post)
       })
+    },
+    fetchThread ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '🧵', resource: 'threads' })
+    },
+    fetchUser ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '👨', resource: 'users' })
+    },
+    fetchPost ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '📃', resource: 'posts' })
+    },
+    fetchItem ({ state, commit }, { id, emoji, resource }) {
+      console.log(`🔥 firebase working ! ${resource} ${emoji} fetched: ${id} ✔`)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref(resource).child(id).once('value', snapshot => {
+          commit('setItem', { item: snapshot.val(), id: snapshot.key, resource })
+          resolve(state[resource][id])
+        })
+      })
     }
   },
   mutations: {
@@ -101,6 +120,10 @@ export default new Vuex.Store({
     },
     setPost (state, { post, postId }) {
       Vue.set(state.posts, postId, post)
+    },
+    setItem (state, { item, id, resource }) {
+      item['.key'] = id
+      Vue.set(state[resource], id, item)
     }
   }
 })
