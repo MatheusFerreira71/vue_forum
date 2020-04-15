@@ -88,14 +88,35 @@ export default new Vuex.Store({
         resolve(post)
       })
     },
+    fetchCategory ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '📜', resource: 'categories' })
+    },
+    fetchCategories ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'categories', emoji: '📜' })
+    },
+    fetchForum ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '📌', resource: 'forums' })
+    },
+    fetchForums ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'forums', emoji: '📌' })
+    },
     fetchThread ({ dispatch }, { id }) {
       return dispatch('fetchItem', { id, emoji: '🧵', resource: 'threads' })
+    },
+    fetchThreads ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'threads', emoji: '🧵' })
+    },
+    fetchPost ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { id, emoji: '📃', resource: 'posts' })
+    },
+    fetchPosts ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'posts', emoji: '📃' })
     },
     fetchUser ({ dispatch }, { id }) {
       return dispatch('fetchItem', { id, emoji: '👨', resource: 'users' })
     },
-    fetchPost ({ dispatch }, { id }) {
-      return dispatch('fetchItem', { id, emoji: '📃', resource: 'posts' })
+    fetchUsers ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { ids, resource: 'users', emoji: '👨' })
     },
     fetchItem ({ state, commit }, { id, emoji, resource }) {
       console.log(`🔥 firebase working ! ${resource} ${emoji} fetched: ${id} ✔`)
@@ -103,6 +124,23 @@ export default new Vuex.Store({
         firebase.database().ref(resource).child(id).once('value', snapshot => {
           commit('setItem', { item: snapshot.val(), id: snapshot.key, resource })
           resolve(state[resource][id])
+        })
+      })
+    },
+    fetchItems ({ dispatch }, { ids, resource, emoji }) {
+      ids = Array.isArray(ids) ? ids : Object.keys(ids)
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, emoji, resource })))
+    },
+    fetchAllCategories ({ state, commit }) {
+      console.log(`🔥 firebase working ! all categories 📜 fetched ✔`)
+      return new Promise((resolve, reject) => {
+        firebase.database().ref('categories').once('value', snapshot => {
+          const categoriesObjects = snapshot.val()
+          Object.keys(categoriesObjects).forEach(categoryId => {
+            const category = categoriesObjects[categoryId]
+            commit('setItem', { item: category, id: categoryId, resource: 'categories' })
+          })
+          resolve(Object.values(state.categories))
         })
       })
     }

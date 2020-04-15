@@ -57,10 +57,11 @@ export default {
     }
   },
   created () {
+    console.clear()
     this.$store.dispatch('fetchThread', { id: this.id }).then(thread => {
       this.$store.dispatch('fetchUser', { id: thread.userId })
-      Object.keys(thread.posts).forEach(postId => {
-        this.$store.dispatch('fetchPost', { id: postId }).then(post => {
+      this.$store.dispatch('fetchPosts', { ids: Object.keys(thread.posts) }).then(posts => {
+        posts.forEach(post => {
           this.$store.dispatch('fetchUser', { id: post.userId })
         })
       })

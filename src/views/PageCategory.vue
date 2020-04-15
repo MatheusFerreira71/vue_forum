@@ -1,5 +1,5 @@
 <template>
-  <div class="full-width">
+  <div class="full-width" v-if="category">
     <div class="col-full push-top">
       <h1>{{ category.name }}</h1>
     </div>
@@ -27,6 +27,12 @@ export default {
     category () {
       return this.$store.state.categories[this.id]
     }
+  },
+  created () {
+    console.clear()
+    this.$store.dispatch('fetchCategory', { id: this.id }).then(category => {
+      this.$store.dispatch('fetchForums', { ids: category.forums })
+    })
   }
 }
 </script>
