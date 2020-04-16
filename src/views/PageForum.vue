@@ -20,6 +20,7 @@
 
 <script>
 import ThreadList from '@/components/ThreadList'
+import { mapActions } from 'vuex'
 export default {
   components: {
     ThreadList
@@ -29,6 +30,9 @@ export default {
       required: true,
       type: String
     }
+  },
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
   },
   computed: {
     forum () {
@@ -42,9 +46,9 @@ export default {
   },
   created () {
     console.clear()
-    this.$store.dispatch('fetchForum', { id: this.id }).then(forum => {
-      this.$store.dispatch('fetchThreads', { ids: forum.threads }).then(threads => {
-        threads.forEach(thread => this.$store.dispatch('fetchUser', { id: thread.userId }))
+    this.fetchForum({ id: this.id }).then(forum => {
+      this.fetchThreads({ ids: forum.threads }).then(threads => {
+        threads.forEach(thread => this.fetchUser({ id: thread.userId }))
       })
     })
   }

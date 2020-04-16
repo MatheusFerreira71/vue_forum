@@ -13,6 +13,7 @@
 
 <script>
 import CategoryListItem from '@/components/CategoryListItem'
+import { mapActions } from 'vuex'
 export default {
   components: {
     CategoryListItem
@@ -23,6 +24,9 @@ export default {
       type: String
     }
   },
+  methods: {
+    ...mapActions(['fetchCategory', 'fetchForums'])
+  },
   computed: {
     category () {
       return this.$store.state.categories[this.id]
@@ -30,9 +34,7 @@ export default {
   },
   created () {
     console.clear()
-    this.$store.dispatch('fetchCategory', { id: this.id }).then(category => {
-      this.$store.dispatch('fetchForums', { ids: category.forums })
-    })
+    this.fetchCategory({ id: this.id }).then(category => this.fetchForums({ ids: category.forums }))
   }
 }
 </script>

@@ -7,20 +7,24 @@
 
 <script>
 import CategoryList from '@/components/CategoryList'
+import { mapActions } from 'vuex'
 export default {
   computed: {
     categories () {
       return Object.values(this.$store.state.categories)
     }
   },
+  methods: {
+    ...mapActions(['fetchAllCategories', 'fetchForums'])
+  },
   components: {
     CategoryList
   },
-  beforeCreate () {
+  created () {
     console.clear()
-    this.$store.dispatch('fetchAllCategories').then(categories => {
+    this.fetchAllCategories().then(categories => {
       categories.forEach(category => {
-        this.$store.dispatch('fetchForums', { ids: Object.keys(category.forums) })
+        this.fetchForums({ ids: Object.keys(category.forums) })
       })
     })
   }

@@ -27,6 +27,7 @@
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 import { countObjectProperties } from '@/utils'
+import { mapActions } from 'vuex'
 export default {
   props: {
     id: {
@@ -56,13 +57,16 @@ export default {
       return countObjectProperties(this.thread.contributors)
     }
   },
+  methods: {
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPosts'])
+  },
   created () {
     console.clear()
-    this.$store.dispatch('fetchThread', { id: this.id }).then(thread => {
-      this.$store.dispatch('fetchUser', { id: thread.userId })
-      this.$store.dispatch('fetchPosts', { ids: Object.keys(thread.posts) }).then(posts => {
+    this.fetchThread({ id: this.id }).then(thread => {
+      this.fetchUser({ id: thread.userId })
+      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(posts => {
         posts.forEach(post => {
-          this.$store.dispatch('fetchUser', { id: post.userId })
+          this.fetchUser({ id: post.userId })
         })
       })
     })
