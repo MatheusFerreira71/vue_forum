@@ -4,7 +4,7 @@ const makeAppendChildToParentMutation = ({ parent, child }) =>
   (state, { childId, parentId }) => {
     const resource = state[parent][parentId]
     if (!resource[child]) {
-      Vue.set(resource, 'posts', {})
+      Vue.set(resource, child, {})
     }
     Vue.set(resource[child], childId, childId)
   }
@@ -14,6 +14,7 @@ export default {
   appendPostToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'posts' }),
   appendThreadToForum: makeAppendChildToParentMutation({ parent: 'forums', child: 'threads' }),
   appendThreadToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'threads' }),
+  appendContributorToThread: makeAppendChildToParentMutation({ parent: 'threads', child: 'contributors' }),
   setUser (state, { user, userId }) {
     Vue.set(state.users, userId, user)
   },
