@@ -21,7 +21,7 @@ export default {
   updateUser ({ commit }, user) {
     commit('setUser', { user, userId: user['.key'] })
   },
-  createThread ({ state, commit, dispatch }, { text, title, forumId }) {
+  createThread ({ state, commit }, { text, title, forumId }) {
     return new Promise((resolve, reject) => {
       const threadId = firebase.database().ref('threads').push().key
       const postId = firebase.database().ref('posts').push().key
@@ -53,13 +53,24 @@ export default {
       })
     })
   },
-  updateThread ({ state, commit, dispatch }, { text, title, id }) {
+  updateThread ({ state, commit }, { text, title, id }) {
     return new Promise((resolve, reject) => {
       const thread = state.threads[id]
-      const newThread = { ...thread, title }
-      commit('setThread', { thread: newThread, threadId: id })
-      dispatch('updatePost', { id: thread.firstPostId, text }).then(() => {
-        resolve(newThread)
+      const post = state.posts[thread.firstPostId]
+
+      const edited = {
+        at: Math.floor(Date.now() / 1000),
+        by: state.authId
+      }
+
+      const updates = {}
+      updates[`posts/${thread.firstPostId}/text`] = text
+      updates[`posts/${thread.firstPostId}/edited`] = edited
+      updates[`threads/${id}/title`] = title
+      firebase.database().ref().update(updates).then(() => {
+        commit('setThread', { thread: { ...thread, title }, threadId: id })
+        commit('setPost', { post: { ...post, text, edited }, postId: thread.firstPostId })
+        resolve(post)
       })
     })
   },

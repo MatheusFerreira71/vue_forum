@@ -1,5 +1,5 @@
 <template>
-  <div v-if="thread && threadCreator" class="col-large push-top">
+  <div v-if="assyncDataStatus_ready" class="col-large push-top">
     <h1>
       {{thread.title}}
       <router-link
@@ -28,7 +28,9 @@ import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 import { countObjectProperties } from '@/utils'
 import { mapActions } from 'vuex'
+import assyncDataStatus from '@/mixins/assyncDataStatus'
 export default {
+  mixins: [assyncDataStatus],
   props: {
     id: {
       required: true,
@@ -64,12 +66,10 @@ export default {
     console.clear()
     this.fetchThread({ id: this.id }).then(thread => {
       this.fetchUser({ id: thread.userId })
-      this.fetchPosts({ ids: Object.keys(thread.posts) }).then(posts => {
-        posts.forEach(post => {
-          this.fetchUser({ id: post.userId })
-        })
-      })
-    })
+      return this.fetchPosts({ ids: Object.keys(thread.posts) })
+    }).then(posts => {
+      return Promise.all(posts.map(post => { this.fetchUser({ id: post.userId }) }))
+    }).then(() => { this.assyncDataStatus_fetched() })
   }
 }
 </script>
