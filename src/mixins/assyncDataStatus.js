@@ -7,6 +7,7 @@ export default {
   methods: {
     assyncDataStatus_fetched () {
       this.assyncDataStatus_ready = true
+      this.$emit('ready')
     }
   }
 }
