@@ -8,6 +8,7 @@ import ThreadEdit from '@/views/PageThreadEdit'
 import Forum from '@/views/PageForum'
 import Category from '@/views/PageCategory'
 import Profile from '@/views/PageProfile'
+import Register from '@/views/PageRegistration'
 
 Vue.use(VueRouter)
 
@@ -63,6 +64,11 @@ const routes = [
     name: 'ProfileEdit',
     component: Profile,
     props: { edit: true }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
   }
 ]
 

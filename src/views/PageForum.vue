@@ -50,8 +50,8 @@ export default {
     console.clear()
     this.fetchForum({ id: this.id }).then(forum => {
       this.fetchThreads({ ids: forum.threads })
-      .then(threads => Promise.all(threads.map(thread => this.fetchUser({ id: thread.userId }))))
-      .then(() => { this.assyncDataStatus_fetched() })
+        .then(threads => Promise.all(threads.map(thread => this.fetchUser({ id: thread.userId }))))
+        .then(() => { this.assyncDataStatus_fetched() })
     })
   }
 }
