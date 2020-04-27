@@ -9,6 +9,7 @@ import Forum from '@/views/PageForum'
 import Category from '@/views/PageCategory'
 import Profile from '@/views/PageProfile'
 import Register from '@/views/PageRegistration'
+import SignIn from '@/views/PageSignIn'
 
 Vue.use(VueRouter)
 
@@ -69,6 +70,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: SignIn
   }
 ]
 
