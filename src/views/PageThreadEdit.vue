@@ -8,7 +8,8 @@
     @save="save"
     @cancel="cancel"
     :title="thread.title"
-    :text="text"/>
+    :text="text"
+    ref="editor"/>
   </div>
 </template>
 
@@ -44,6 +45,16 @@ export default {
     text () {
       const post = this.$store.state.posts[this.thread.firstPostId]
       return post ? post.text : null
+    },
+    hasUnsavedChanges () {
+      const editTitle = this.$refs.editor.form.title
+      const editText = this.$refs.editor.form.text
+      return (editTitle !== this.thread.title || editText !== this.text) && !this.saved
+    }
+  },
+  data () {
+    return {
+      saved: false
     }
   },
   components: {
@@ -54,6 +65,18 @@ export default {
     this.fetchThread({ id: this.id }).then(thread => this.fetchPost({ id: thread.firstPostId })).then(() => {
       this.assyncDataStatus_fetched()
     })
+  },
+  beforeRouteLeave (to, from, next) {
+    if (this.hasUnsavedChanges) {
+      const confirmed = window.confirm('Are you sure you want to leave? Unsaved changes will be lost.')
+      if (confirmed) {
+        next()
+      } else {
+        next(false)
+      }
+    } else {
+      next()
+    }
   }
 }
 </script>
